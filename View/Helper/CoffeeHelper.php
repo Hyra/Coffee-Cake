@@ -55,12 +55,18 @@ class CoffeeHelper extends AppHelper {
 	}
 
 	public function auto_compile_coffee($coffee_fname, $js_fname) {
-		if(filemtime($js_fname) < filemtime($coffee_fname)) {
+		if(file_exists($js_fname) && filemtime($js_fname) < filemtime($coffee_fname)) {
 			$coffeeScript = file_get_contents($coffee_fname);
 			if($coffeeScript !== '') {
-				$new_cache = CoffeeScript\compile($coffeeScript);
-				$jsFile = new File($js_fname, TRUE);
-				$jsFile->write($new_cache);
+				try {
+					$new_cache = CoffeeScript\compile($coffeeScript);
+					$jsFile = new File($js_fname, TRUE);
+					$jsFile->write($new_cache);
+				} catch (Exception $e) {
+					echo "<pre>";
+					echo ($e);
+					echo "</pre>";
+				}
 			}
 		}
 	}
