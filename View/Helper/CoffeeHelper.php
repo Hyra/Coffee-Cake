@@ -55,7 +55,7 @@ class CoffeeHelper extends AppHelper {
 	}
 
 	public function auto_compile_coffee($coffee_fname, $js_fname) {
-		if(file_exists($js_fname) && filemtime($js_fname) < filemtime($coffee_fname)) {
+		if (!file_exists($js_fname) || filemtime($js_fname) < filemtime($coffee_fname)) {
 			$coffeeScript = file_get_contents($coffee_fname);
 			if($coffeeScript !== '') {
 				try {
