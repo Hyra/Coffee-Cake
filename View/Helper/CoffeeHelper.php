@@ -23,18 +23,19 @@ App::uses('Folder', 'Utility');
 App::uses('File', 'Utility');
 App::uses('Component', 'Controller');
 
-require_once(APP . 'Plugin/Coffee/Vendor/coffeescript/coffeescript.php');
+require_once(APP . 'Plugin/Coffee/Vendor/CoffeeScript/Init.php');
+CoffeeScript\Init::load();
 
 class CoffeeHelper extends AppHelper {
-	
+
 	public $helpers = array('Html');
-	
+
 	public function __construct(View $View, $options = array()) {
 		parent::__construct($View, $options);
 		$this->coffeeFolder = new Folder(APP . 'webroot' . DS . 'coffee');
 		$this->jsFolder = new Folder(APP . 'webroot' . DS . 'js');
 	}
-	
+
 	public function script($file) {
 		if(is_array($file)) {
 			foreach($file as $candidate) {
@@ -55,11 +56,11 @@ class CoffeeHelper extends AppHelper {
 	}
 
 	public function auto_compile_coffee($coffee_fname, $js_fname) {
-		if (!file_exists($js_fname) || filemtime($js_fname) < filemtime($coffee_fname)) {
+		if(file_exists($js_fname) && filemtime($js_fname) < filemtime($coffee_fname)) {
 			$coffeeScript = file_get_contents($coffee_fname);
 			if($coffeeScript !== '') {
 				try {
-					$new_cache = CoffeeScript\compile($coffeeScript);
+					$new_cache = CoffeeScript\Compiler::compile($coffeeScript);
 					$jsFile = new File($js_fname, TRUE);
 					$jsFile->write($new_cache);
 				} catch (Exception $e) {
