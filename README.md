@@ -1,7 +1,7 @@
 ## Coffee Helper
 
 This little Helper converts your .coffee files into .js without relying on Node.js or client-side parsing.
-Everything is compiled on the server, cached, and served as regular js through PHP.
+Everything is compiled on the server, cached, and served as regular js through using the [coffeescript-php](https://github.com/alxlit/coffeescript-php) compiler.
 
 ## Installation
 
